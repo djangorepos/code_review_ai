@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock /app/
 
-RUN pip install poetry && poetry install --no-root
+RUN pip install poetry==1.8.4 && poetry install --no-root
 
 COPY . .

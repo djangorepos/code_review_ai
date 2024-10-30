@@ -15,9 +15,21 @@ allowing them to discover potential issues in their codebase.
 
 3. Run "docker-compose up" command to install all dependencies.
 4. Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
-   assignment_description (string): Description of the coding assignment.
-   github_repo_url (string): URL of the GitHub repository to be reviewed.
-   candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
+      assignment_description (string): Description of the coding assignment.
+      github_repo_url (string): URL of the GitHub repository to be reviewed.
+      candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
+   
+   Example of input:
+   curl -X 'POST' \
+     'http://localhost/review' \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{
+     "assignment_description": "The task is to develop a backend REST API for an Auto-Review Tool with specific functionalities and best practices in mind.",
+     "github_repo_url": "https://github.com/djangorepos/code_review_ai.git",
+     "candidate_level": "Junior"
+   }'
+    
 5. Return is a structured review in this format:
    Found files,
    Downsides/Comments,
