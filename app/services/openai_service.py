@@ -8,7 +8,7 @@ from app.config import settings
 
 logger = logging.getLogger("CodeReviewAI")
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-MODEL = "gpt-4o-mini"
+MODEL = settings.MODEL
 MAX_RETRIES = 5
 
 

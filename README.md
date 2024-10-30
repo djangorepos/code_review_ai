@@ -11,6 +11,7 @@ allowing them to discover potential issues in their codebase.
    
    API_KEY=***Your OpenAI API KEY***
    GITHUB_TOKEN=***Your GitHub Token(get it in developer settings menu***
+   MODEL=gpt-4o-mini ***or any else, that capable to work with code***
     
    Press CTRL+O (Omega) to save and CTRL+X to close.
 3. Run "docker-compose up" command to install all dependencies.
