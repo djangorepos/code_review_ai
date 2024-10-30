@@ -27,7 +27,12 @@ async def review_code(request: ReviewRequest, redis: Redis = Depends(get_redis_c
     cache_key = f"review:{request.github_repo_url}:{request.candidate_level}"
 
     # Check Redis cache
-    cached_response = await redis.get(cache_key)
+    try:
+        cached_response = await redis.get(cache_key)
+    except Exception as error:
+        print(error)
+        cached_response = None
+
     if cached_response:
         logger.info(f"Cache hit for {cache_key}")
         return ReviewResponse.parse_raw(cached_response)

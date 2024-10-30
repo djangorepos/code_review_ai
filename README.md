@@ -6,13 +6,19 @@ recommendations to enhance the code. It is a valuable tool for developers,
 allowing them to discover potential issues in their codebase. 
 
 # Installation process
-1.	Clone repository
-2.	Run docker-compose up to install all dependencies
-3.	Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
+1. Clone repository
+2. Create .env file with "nano .env" command and write here 
+   
+   API_KEY=***Your OpenAI API KEY***
+   
+   GITHUB_TOKEN=***Your GitHub Token(get it in developer settings menu***
+
+3. Run "docker-compose up" command to install all dependencies.
+4. Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
    assignment_description (string): Description of the coding assignment.
    github_repo_url (string): URL of the GitHub repository to be reviewed.
    candidate_level (string): Candidate's level, which could be "Junior," "Middle," or "Senior."
-4.	Return is a structured review in this format:
+5. Return is a structured review in this format:
    Found files
    Downsides/Comments
    Rating
