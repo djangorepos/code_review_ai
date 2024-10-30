@@ -1,9 +1,11 @@
 import time
 
 import openai
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 from openai import RateLimitError
+from redis.asyncio import Redis
 
+from app.dependencies import get_redis_client
 from app.config import settings
 import logging
 
@@ -13,7 +15,7 @@ model = "gpt-4o-mini"
 max_retries = 5
 
 
-async def analyze_code(assigment, level, contents: str) -> str:
+async def analyze_code(assigment, level, contents: str, redis: Redis = Depends(get_redis_client)) -> str:
     try:
         messages = [{"role": "user",
                      "content": f"""Task was {assigment} for candidate level {level}. Analyze the following code and write paragraphs:
@@ -34,11 +36,19 @@ async def analyze_code(assigment, level, contents: str) -> str:
         retries = 0
         while retries < max_retries:
             try:
+                cache_key = f"{model}:{str(messages)}"
+                cached_response = await redis.get(cache_key)
+                if cached_response:
+                    return cached_response
+
                 completion = client.chat.completions.create(
                     model=model, messages=messages, max_tokens=1024, n=1,
                     stop=None, temperature=0.5
                 )
-                return completion.choices[0].message.content.strip()
+                response = completion.choices[0].message.content.strip()
+                await redis.set(cache_key, response, ex=3600)  # Cache for 1 hour
+
+                return response
 
             except RateLimitError as e:
                 print(f"Rate limit exceeded: {e}. Retrying...")
