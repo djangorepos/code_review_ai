@@ -6,8 +6,8 @@ recommendations to enhance the code. It is a valuable tool for developers,
 allowing them to discover potential issues in their codebase. 
 
 # Installation process
-1. Clone repository
-2. Create .env file with "nano .env" command and write here 
+1. Clone repository with command "git clone https://github.com/djangorepos/code_review_ai.git"
+2. Change directory with command "cd code_review_ai". Create .env file with "nano .env" command and write here:
    
    API_KEY=***Your OpenAI API KEY***
    
