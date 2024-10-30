@@ -49,7 +49,7 @@ async def analyze_code(redis: Redis, repository_id: str, assignment: str, level:
                     return cached_response
 
                 # Call OpenAI API
-                completion = await client.chat.completions.create(
+                completion = client.chat.completions.create(
                     model=model, messages=messages, max_tokens=1024, n=1,
                     stop=None, temperature=0.5
                 )
