@@ -12,6 +12,12 @@ class ReviewRequest(BaseModel):
             raise ValueError("candidate_level must be one of: Junior, Middle, Senior")
         return v
 
+    @field_validator("assignment_description")
+    def validate_assignment_description(cls, v):
+        if not v.strip():
+            raise ValueError("assignment_description cannot be empty")
+        return v
+
 
 class ReviewResponse(BaseModel):
     found_files: list[str]
