@@ -20,22 +20,55 @@ allowing them to discover potential issues in their codebase.
       github_repo_url (string): URL of the GitHub repository to be reviewed.
       candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
    
-   Example of input:
-   curl -X 'POST' \
-     'http://localhost/review' \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{
-     "assignment_description": "The task is to develop a backend REST API for an Auto-Review Tool with specific functionalities and best practices in mind.",
-     "github_repo_url": "https://github.com/djangorepos/code_review_ai.git",
-     "candidate_level": "Junior"
-   }'
-    
+       Example of input:
+       curl -X 'POST' \
+         'http://localhost/review' \
+         -H 'accept: application/json' \
+         -H 'Content-Type: application/json' \
+         -d '{
+         "assignment_description": "The task is to develop a backend REST API for an Auto-Review Tool with specific functionalities and best practices in mind.",
+         "github_repo_url": "https://github.com/djangorepos/code_review_ai.git",
+         "candidate_level": "Junior"
+       }'
+
 5. Return is a structured review in this format:
-   Found files,
-   Downsides/Comments,
-   Rating,
-   Conclusion.
+      Found files,
+      Downsides/Comments,
+      Rating,
+      Conclusion.
+   
+       Response body:
+
+            {
+             "found_files": [
+               ".gitignore",
+               "Dockerfile",
+               "LICENSE",
+               "README.md",
+               "app/cache.py",
+               "app/config.py",
+               "app/dependencies.py",
+               "app/main.py",
+               "app/models.py",
+               "app/services/github_service.py",
+               "app/services/openai_service.py",
+               "app/services/review_service.py",
+               "docker-compose.yml",
+               "poetry.lock",
+               "pyproject.toml",
+               "requirements.txt",
+               "tests/__init__.py",
+               "tests/test_review.py"
+             ],
+    
+            "downsides": "- The code lacks comprehensive comments and documentation, which can hinder understanding for new developers or contributors.
+                            - Error handling is somewhat basic; while there are some HTTP exceptions, more specific error messages could enhance debugging.
+                            - The validation for the `candidate_level` in the `ReviewRequest` model could be improved to provide clearer feedback on invalid input.",
+    
+           "rating": "4/5 - The code is well-structured and demonstrates good practices, such as using asynchronous programming and proper API design. However, enhancing documentation and error handling could significantly improve the overall quality and maintainability.",
+    
+            "conclusion": "Despite the downsides mentioned above, the implementation effectively leverages modern frameworks and libraries, making it a solid foundation for the Auto-Review Tool. The use of asynchronous calls and caching mechanisms indicates a focus on performance, which is crucial for handling multiple review requests efficiently."
+           }
 
 # Test
    Use "pytest" command to run all project tests
