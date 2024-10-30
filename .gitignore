@@ -151,4 +151,5 @@ cython_debug/
 .aws-sam/
 # PyCharm
 .idea
+.idea/
 /.vs
