@@ -65,7 +65,7 @@ allowing them to discover potential issues in their codebase.
                             - Error handling is somewhat basic; while there are some HTTP exceptions, more specific error messages could enhance debugging.
                             - The validation for the `candidate_level` in the `ReviewRequest` model could be improved to provide clearer feedback on invalid input.",
     
-           "rating": "4/5 - The code is well-structured and demonstrates good practices, such as using asynchronous programming and proper API design. However, enhancing documentation and error handling could significantly improve the overall quality and maintainability.",
+           "rating": "4/5",
     
             "conclusion": "Despite the downsides mentioned above, the implementation effectively leverages modern frameworks and libraries, making it a solid foundation for the Auto-Review Tool. The use of asynchronous calls and caching mechanisms indicates a focus on performance, which is crucial for handling multiple review requests efficiently."
            }
