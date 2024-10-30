@@ -10,9 +10,9 @@ allowing them to discover potential issues in their codebase.
 2. Change directory with command "cd code_review_ai". Create .env file with "nano .env" command and write here:
    
    API_KEY=***Your OpenAI API KEY***
-   
    GITHUB_TOKEN=***Your GitHub Token(get it in developer settings menu***
-
+    
+   Press CTRL+O (Omega) to save and CTRL+X to close.
 3. Run "docker-compose up" command to install all dependencies.
 4. Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
       assignment_description (string): Description of the coding assignment.
