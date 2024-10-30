@@ -17,4 +17,4 @@ class ReviewResponse(BaseModel):
     found_files: list[str]
     downsides: str
     rating: str
-    comments: str
+    conclusion: str
