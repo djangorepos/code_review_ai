@@ -19,10 +19,10 @@ allowing them to discover potential issues in their codebase.
    github_repo_url (string): URL of the GitHub repository to be reviewed.
    candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
 5. Return is a structured review in this format:
-   Found files
-   Downsides/Comments
-   Rating
-   Conclusion
+   Found files,
+   Downsides/Comments,
+   Rating,
+   Conclusion.
 
 # Test
    Use "pytest" command to run all project tests
