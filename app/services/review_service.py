@@ -1,5 +1,5 @@
-from app.services.github import fetch_repository_contents
-from app.services.openai import analyze_code
+from app.services.github_service import fetch_repository_contents
+from app.services.openai_service import analyze_code
 from app.models import ReviewRequest, ReviewResponse
 
 
