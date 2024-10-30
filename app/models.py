@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl, Field
+from pydantic import BaseModel, HttpUrl, Field, field_validator
 
 
 class ReviewRequest(BaseModel):
@@ -6,7 +6,7 @@ class ReviewRequest(BaseModel):
     github_repo_url: HttpUrl
     candidate_level: str = Field(..., description="Junior, Middle, or Senior")
 
-    @classmethod
+    @field_validator("candidate_level")
     def validate_candidate_level(cls, v):
         if v not in {"Junior", "Middle", "Senior"}:
             raise ValueError("candidate_level must be one of: Junior, Middle, Senior")
@@ -15,6 +15,6 @@ class ReviewRequest(BaseModel):
 
 class ReviewResponse(BaseModel):
     found_files: list[str]
-    downsides_comments: list[str]
-    rating: float
-    conclusion: str
+    downsides: str
+    rating: str
+    comments: str

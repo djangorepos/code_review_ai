@@ -4,18 +4,32 @@ from app.config import settings
 import logging
 
 logger = logging.getLogger("CodeReviewAI")
+client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+model = "gpt-4-turbo"
 
-openai.api_key = settings.OPENAI_API_KEY
 
-
-async def analyze_code(contents: str) -> str:
+async def analyze_code(assigment, contents: str) -> str:
     try:
-        response = openai.Completion.create(
-            model="gpt-4-turbo",
-            prompt=f"Analyze the following code: {contents}",
-            max_tokens=150
+        messages = [{"role": "user",
+                     "content": f"""Task was {assigment}. Analyze the following code and write paragraphs:
+                                Downsides, Rating in format (n/5) only numbers, and some comments on next line"
+                                Use the following response format, keeping the section headings as-is, and provide
+                                your feedback. Use bullet points for each response. The provided examples are for 
+                                illustration purposes only and should not be repeated."
+                                ### Downsides:"
+                                - something wrong
+                                - something wrong
+                                - something wrong
+                                ### Rating:
+                                n/5
+                                ### Comments:
+                                Despite the downsides mentioned above, some comments.
+                                {contents}"""}]
+        completion = client.chat.completions.create(
+            model=model, messages=messages, max_tokens=1024, n=1,
+            stop=None, temperature=0.5
         )
-        return response.choices[0].text.strip()
+        return completion.choices[0].message.content.strip()
     except openai.RateLimitError:
         logger.error("OpenAI API rate limit exceeded.")
         raise HTTPException(status_code=429, detail="OpenAI API rate limit exceeded.")
