@@ -4,7 +4,7 @@ services:
     command: [
     "poetry", "run",
     "uvicorn",
-    "main:app",
+    "app.main:app",
     "--port", "80"
   ]
     ports:
