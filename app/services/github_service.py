@@ -13,7 +13,6 @@ def format_repo_url(repo_url):
     # Ensure the URL starts with the correct prefix
     if repo_url.startswith("https://github.com"):
         repo_url = repo_url.replace("github.com", "api.github.com/repos")
-
         # Remove the '.git' suffix if present
         if repo_url.endswith(".git"):
             repo_url = repo_url[:-4]  # Remove the last 4 characters (".git")
