@@ -30,7 +30,6 @@ def format_repo_url(repo_url):
 
 
 async def fetch_repository_contents(repo_url: str):
-    print(repo_url)
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(repo_url, headers=headers)
@@ -60,7 +59,6 @@ async def process_item(item, repository_data):
             print(f"Error fetching {item['name']}: {e}")
     elif item['type'] == 'dir':
         # If the item is a directory, fetch its contents recursively
-        print(f"Entering directory: {item['name']}")
         directory_contents = await fetch_repository_contents(item['url'])
         for sub_item in directory_contents:
             repository_data = await process_item(sub_item, repository_data)  # Process each item in the directory

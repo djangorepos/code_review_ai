@@ -8,7 +8,6 @@ from app.models import ReviewRequest, ReviewResponse
 async def generate_review(request: ReviewRequest) -> ReviewResponse:
     repo_contents = await get_repository_contents(request.github_repo_url)
     analysis = await analyze_code(request.assignment_description, request.candidate_level, str(repo_contents))
-    print(analysis)
     downsides_text, rating_text, conclusion_text = extract_sections(analysis)
 
     return ReviewResponse(

@@ -47,8 +47,8 @@ async def review_code(request: ReviewRequest, redis: Redis = Depends(get_redis_c
         logger.error(f"Failed to generate review: {e.detail}")
         raise e
     except Exception as e:
-        logger.exception("Unexpected error occurred")
-        raise HTTPException(status_code=500, detail="An unexpected error occurred")
+        logger.exception("Unexpected error occurred", e)
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred, {e}")
 
 
 if __name__ == "__main__":
