@@ -1,11 +1,16 @@
+import time
+
 import openai
 from fastapi import HTTPException
+from openai import RateLimitError
+
 from app.config import settings
 import logging
 
 logger = logging.getLogger("CodeReviewAI")
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 model = "gpt-4o-mini"
+max_retries = 5
 
 
 async def analyze_code(assigment, level, contents: str) -> str:
@@ -25,15 +30,24 @@ async def analyze_code(assigment, level, contents: str) -> str:
                                 ### Comments:
                                 Despite the downsides mentioned above, some comments.
                                 {contents}"""}]
-        completion = client.chat.completions.create(
-            model=model, messages=messages, max_tokens=1024, n=1,
-            stop=None, temperature=0.5
-        )
-        return completion.choices[0].message.content.strip()
 
-    except openai.RateLimitError:
-        logger.error("OpenAI API rate limit exceeded.")
-        raise HTTPException(status_code=429, detail="OpenAI API rate limit exceeded.")
+        retries = 0
+        while retries < max_retries:
+            try:
+                completion = client.chat.completions.create(
+                    model=model, messages=messages, max_tokens=1024, n=1,
+                    stop=None, temperature=0.5
+                )
+                return completion.choices[0].message.content.strip()
+
+            except RateLimitError as e:
+                print(f"Rate limit exceeded: {e}. Retrying...")
+                retries += 1
+                wait_time = 2 ** retries  # Exponential backoff
+                time.sleep(wait_time)
+
+        raise Exception("Max retries exceeded. Unable to get a response from the API.")
+
     except openai.BadRequestError as e:
         logger.error(f"Invalid request to OpenAI API: {str(e)}")
         raise HTTPException(status_code=400, detail="Invalid request to OpenAI API.")

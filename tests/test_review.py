@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 
-BASE_URL = "http://localhost:8000"
+base_url = "http://localhost:80"
 client = TestClient(app)
 
 
@@ -14,7 +14,7 @@ async def test_review_endpoint():
         "candidate_level": "Junior"
     }
 
-    response = client.post(f"{BASE_URL}/review", json=request_payload)
+    response = client.post(f"{base_url}/review", json=request_payload)
 
     assert response.status_code == 200
     data = response.json()
@@ -31,7 +31,7 @@ async def test_invalid_candidate_level():
         "github_repo_url": "https://api.github.com/repos/djangorepos/code_review_ai",
         "candidate_level": "InvalidLevel"
     }
-    response = client.post(f"{BASE_URL}/review", json=request_payload)
+    response = client.post(f"{base_url}/review", json=request_payload)
 
     assert response.status_code == 422
 
@@ -45,7 +45,7 @@ async def test_github_invalid_link():
         "candidate_level": "Junior",
     }
 
-    response = client.post(f"{BASE_URL}/review", json=request_payload)
+    response = client.post(f"{base_url}/review", json=request_payload)
 
     assert response.status_code == 404
     assert response.json() == {'detail': 'GitHub repository not found.'}

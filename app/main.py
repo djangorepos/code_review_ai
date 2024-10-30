@@ -52,4 +52,4 @@ async def review_code(request: ReviewRequest, redis: Redis = Depends(get_redis_c
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000, log_config=LOGGING_CONFIG)
+    uvicorn.run(app, host="localhost", port=80, log_config=LOGGING_CONFIG)
