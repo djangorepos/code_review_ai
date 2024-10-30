@@ -1,18 +1,16 @@
-import time
-
+import logging
 import openai
-from fastapi import HTTPException, Depends
+import time
+from fastapi import HTTPException
 from openai import RateLimitError
 from redis.asyncio import Redis
-
-from app.dependencies import get_redis_client
 from app.config import settings
-import logging
+
 
 logger = logging.getLogger("CodeReviewAI")
 client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-model = "gpt-4o-mini"
-max_retries = 5
+MODEL = "gpt-4o-mini"
+MAX_RETRIES = 5
 
 
 async def analyze_code(redis: Redis, repository_id: str, assignment: str, level: str, contents: str) -> str:
@@ -50,7 +48,7 @@ async def analyze_code(redis: Redis, repository_id: str, assignment: str, level:
 
                 # Call OpenAI API
                 completion = client.chat.completions.create(
-                    model=model, messages=messages, max_tokens=1024, n=1,
+                    model=MODEL, messages=messages, max_tokens=1024, n=1,
                     stop=None, temperature=0.5
                 )
                 response = completion.choices[0].message.content.strip()

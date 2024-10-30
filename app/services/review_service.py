@@ -6,8 +6,8 @@ from app.services.openai_service import analyze_code
 from app.models import ReviewRequest, ReviewResponse
 
 
-async def generate_review(request: ReviewRequest) -> ReviewResponse:
-    repo_contents, repo_id = await get_repository_contents(request.github_repo_url)
+async def generate_review(request: ReviewRequest, repo_id: str) -> ReviewResponse:
+    repo_contents = await get_repository_contents(request.github_repo_url)
     analysis = await analyze_code(redis_client, repo_id, request.assignment_description, request.candidate_level, str(repo_contents))
     downsides_text, rating_text, conclusion_text = extract_sections(analysis)
 

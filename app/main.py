@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Depends
@@ -12,19 +13,11 @@ from app.services.github_service import get_repo_id
 from app.services.review_service import generate_review
 from app.dependencies import get_redis_client
 from redis.asyncio import Redis
-from fastapi_limiter import FastAPILimiter
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("CodeReviewAI")
-
 app = FastAPI(title="CodeReviewAI", docs_url="/swagger")
-
-
-@app.on_event("startup")
-async def startup():
-    # Initialize the rate limiter with Redis
-    await FastAPILimiter.init(redis_client)
 
 
 @app.get("/", include_in_schema=False)
@@ -32,7 +25,7 @@ async def redirect_to_docs():
     return RedirectResponse(url="/swagger")  # Redirect to Swagger UI
 
 
-@app.post("/review", response_model=ReviewResponse, dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+@app.post("/review", response_model=ReviewResponse)
 async def review_code(request: ReviewRequest, redis: Redis = Depends(get_redis_client)):
     repo_id, repo_url = await get_repo_id(request.github_repo_url)
     cache_key = f"review:{repo_id}:{repo_url}:{request.candidate_level}"
@@ -49,7 +42,7 @@ async def review_code(request: ReviewRequest, redis: Redis = Depends(get_redis_c
 
     # Generate review and handle possible errors
     try:
-        review = await generate_review(request)
+        review = await generate_review(request, repo_id)
         await redis.set(cache_key, review.json(), ex=3600)  # Cache for 1 hour
         logger.info(f"Generated review for {cache_key} and cached the result")
         return review
