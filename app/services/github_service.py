@@ -64,7 +64,7 @@ async def fetch_repository(repo_url: str):
 
         except httpx.RequestError as e:
             # Handle request errors (e.g., network issues)
-            logger.error(f"An error occurred while requesting {repo_url}: {e}")
+            logger.error(f"Network error occurred while requesting {repo_url}: {e}")
             raise HTTPException(status_code=500, detail="Network error occurred while trying to reach the GitHub API.")
 
         except Exception as e:

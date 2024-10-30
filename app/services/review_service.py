@@ -8,15 +8,20 @@ from app.models import ReviewRequest, ReviewResponse
 
 async def generate_review(request: ReviewRequest, repo_id: str) -> ReviewResponse:
     repo_contents = await get_repository_contents(request.github_repo_url)
-    analysis = await analyze_code(redis_client, repo_id, request.assignment_description, request.candidate_level, str(repo_contents))
+    analysis = await analyze_code(redis_client, repo_id, request.assignment_description, request.candidate_level,
+                                  str(repo_contents))
     downsides_text, rating_text, conclusion_text = extract_sections(analysis)
 
-    return ReviewResponse(
-        found_files=[file['path'] for file in repo_contents],
-        downsides=downsides_text,
-        rating=rating_text,
-        conclusion=conclusion_text
-    )
+    if downsides_text and rating_text and conclusion_text:
+        return ReviewResponse(
+            found_files=[file['path'] for file in repo_contents],
+            downsides=downsides_text,
+            rating=rating_text,
+            conclusion=conclusion_text
+        )
+
+    else:
+        raise ValueError("Response has unexpected structure")
 
 
 def extract_sections(text):
