@@ -17,7 +17,7 @@ allowing them to discover potential issues in their codebase.
 4. Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
    assignment_description (string): Description of the coding assignment.
    github_repo_url (string): URL of the GitHub repository to be reviewed.
-   candidate_level (string): Candidate's level, which could be "Junior," "Middle," or "Senior."
+   candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
 5. Return is a structured review in this format:
    Found files
    Downsides/Comments
@@ -25,7 +25,7 @@ allowing them to discover potential issues in their codebase.
    Conclusion
 
 # Test
-   Use pytest command to run all project tests
+   Use "pytest" command to run all project tests
 
 # What if
 Scaling the Coding Assignment Auto-Review Tool to handle over 100 review requests per minute and large repositories presents a set of challenges that require careful architectural considerations. Below is a detailed outline of a potential system architecture along with performance considerations for scaling the tool.
