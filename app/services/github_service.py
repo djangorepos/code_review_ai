@@ -3,7 +3,6 @@ import logging
 from fastapi import HTTPException
 from app.config import settings
 
-
 logger = logging.getLogger("CodeReviewAI")
 HEADERS = {"Authorization": f"token {settings.GITHUB_TOKEN}"}
 ERROR_MESSAGES = {
@@ -26,17 +25,10 @@ def format_repo_url(repo_url):
     return repo_url
 
 
-async def get_repo_id(github_repo_url):
-    # Get id of repository
-    repo_url = format_repo_url(str(github_repo_url))
-    repo = await fetch_repository(repo_url)
-    return repo.get("id"), repo_url
-
-
 async def get_repository_contents(github_repo_url: str):
     repo_data = []
     repo_url = format_repo_url(str(github_repo_url))
-    repo_contents = await fetch_repository(repo_url + "/contents")
+    repo_contents = await fetch_repository(f"{repo_url}/contents")
 
     for item in repo_contents:
         await process_item(item, repo_data)
@@ -44,11 +36,20 @@ async def get_repository_contents(github_repo_url: str):
     return repo_data
 
 
+async def get_latest_commit_hash(github_repo_url: str) -> str:
+    async with httpx.AsyncClient() as client:
+        repo_url = format_repo_url(str(github_repo_url))
+        response = await client.get(f"{repo_url}/commits", headers=HEADERS)
+        response.raise_for_status()
+        commits = response.json()
+        return commits[0]['sha']  # Return the latest commit hash with Secure Hash Algorithm
+
+
 async def fetch_repository(repo_url: str):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(repo_url, headers=HEADERS)
-            response.raise_for_status()  # Raise an error for bad responses
+            response.raise_for_status()
             return response.json()
 
         except httpx.HTTPStatusError as e:

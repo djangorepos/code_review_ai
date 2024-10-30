@@ -3,7 +3,6 @@ import openai
 import time
 from fastapi import HTTPException
 from openai import RateLimitError
-from redis.asyncio import Redis
 from app.config import settings
 
 
@@ -13,7 +12,7 @@ MODEL = "gpt-4o-mini"
 MAX_RETRIES = 5
 
 
-async def analyze_code(redis: Redis, repository_id: str, assignment: str, level: str, contents: str) -> str:
+async def analyze_code(assignment: str, level: str, contents: str) -> str:
     max_retries = 5  # Define the maximum number of retries for rate limit errors
 
     try:
@@ -38,21 +37,11 @@ async def analyze_code(redis: Redis, repository_id: str, assignment: str, level:
         retries = 0
         while retries < max_retries:
             try:
-                cache_key = f"repository:{repository_id}:{level}:{assignment}"
-
-                # Check Redis cache
-                cached_response = await redis.get(cache_key)
-                if cached_response:
-                    logger.info(f"Cache hit for {cache_key}")
-                    return cached_response
-
-                # Call OpenAI API
                 completion = client.chat.completions.create(
                     model=MODEL, messages=messages, max_tokens=1024, n=1,
                     stop=None, temperature=0.5
                 )
                 response = completion.choices[0].message.content.strip()
-                await redis.set(cache_key, response, ex=3600)  # Cache for 1 hour
 
                 return response
 
