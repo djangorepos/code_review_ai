@@ -18,8 +18,8 @@ allowing them to discover potential issues in their codebase.
    Press CTRL+O (Omega) to save and CTRL+X to close.
 3. Run "docker-compose up" command to install all dependencies.
 4. Go to your browser and use swagger endpoint, or use POSTMAN. Request body should be:
-      assignment_description (string): Description of the coding assignment.
-      github_repo_url (string): URL of the GitHub repository to be reviewed.
+      assignment_description (string): Description of the coding assignment,
+      github_repo_url (string): URL of the GitHub repository to be reviewed,
       candidate_level (string): Candidate's level, which should be "Junior," "Middle," or "Senior."
    
        Example of input:
