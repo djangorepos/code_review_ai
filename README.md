@@ -10,7 +10,9 @@ allowing them to discover potential issues in their codebase.
 2. Change directory with command "cd code_review_ai". Create .env file with "nano .env" command and write here:
    
    API_KEY=***Your OpenAI API KEY***
+
    GITHUB_TOKEN=***Your GitHub Token(get it in developer settings menu***
+   
    MODEL=gpt-4o-mini ***or any else, that capable to work with code***
     
    Press CTRL+O (Omega) to save and CTRL+X to close.
