@@ -39,10 +39,9 @@ async def get_repository_contents(github_repo_url: str):
 async def get_latest_commit_hash(github_repo_url: str) -> str:
     async with httpx.AsyncClient() as client:
         repo_url = format_repo_url(str(github_repo_url))
-        response = await client.get(f"{repo_url}/commits", headers=HEADERS)
-        response.raise_for_status()
-        commits = response.json()
-        return commits[0]['sha']  # Return the latest commit hash with Secure Hash Algorithm
+        commits = await fetch_repository(f"{repo_url}/commits")
+        # Return the latest commit hash with Secure Hash Algorithm
+        return commits[0]['sha']
 
 
 async def fetch_repository(repo_url: str):

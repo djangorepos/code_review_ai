@@ -62,8 +62,8 @@ allowing them to discover potential issues in their codebase.
           ],
 
          "downsides": "- The code lacks comprehensive comments and documentation, which can hinder understanding for new developers or contributors.
-                         - Error handling is somewhat basic; while there are some HTTP exceptions, more specific error messages could enhance debugging.
-                         - The validation for the `candidate_level` in the `ReviewRequest` model could be improved to provide clearer feedback on invalid input.",
+                       - Error handling is somewhat basic; while there are some HTTP exceptions, more specific error messages could enhance debugging.
+                       - The validation for the `candidate_level` in the `ReviewRequest` model could be improved to provide clearer feedback on invalid input.",
 
          "rating": "4/5",
 
